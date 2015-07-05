@@ -211,37 +211,20 @@ static void SWIGUNUSED SWIG_JavaThrowException(JNIEnv *jenv, SWIG_JavaExceptionC
 #define SWIG_contract_assert(nullreturn, expr, msg) if (!(expr)) {SWIG_JavaThrowException(jenv, SWIG_JavaIllegalArgumentException, msg); return nullreturn; } else
 
 
-#include "common.h"
-#include "lexicon/lexicon.h"
-#include "spellchecker/configuration.h"
-#include "spellchecker/spellchecker.h"
-#include "token/input_format.h"
-#include "token/output_format.h"
-#include "utils/options.h"
-#include "utils/parse.h"
-#include "version/version.h"
-#include <codecvt>
-using namespace ufal::korektor;
+#include "./src/Correct.h"
 
 
 #include <string>
-
-
-#include <stdexcept>
-
-
-#include <vector>
-#include <stdexcept>
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_new_1Configuration(JNIEnv *jenv, jclass jcls, jstring jarg1) {
+SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_new_1Correct(JNIEnv *jenv, jclass jcls, jstring jarg1) {
   jlong jresult = 0 ;
   std::string arg1 ;
-  Configuration *result = 0 ;
+  Correct *result = 0 ;
   
   (void)jenv;
   (void)jcls;
@@ -253,509 +236,42 @@ SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_new_1Configu
   if (!arg1_pstr) return 0;
   (&arg1)->assign(arg1_pstr);
   jenv->ReleaseStringUTFChars(jarg1, arg1_pstr); 
-  result = (Configuration *)new Configuration(arg1);
-  *(Configuration **)&jresult = result; 
+  result = (Correct *)new Correct(arg1);
+  *(Correct **)&jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_delete_1Configuration(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  Configuration *arg1 = (Configuration *) 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = *(Configuration **)&jarg1; 
-  delete arg1;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1first_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
-  Token *arg1 = (Token *) 0 ;
-  unsigned int arg2 ;
+SWIGEXPORT jstring JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Correct_1suggest(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  jstring jresult = 0 ;
+  Correct *arg1 = (Correct *) 0 ;
+  std::string arg2 ;
+  std::string result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  arg2 = (unsigned int)jarg2; 
-  if (arg1) (arg1)->first = arg2;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1first_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  Token *arg1 = (Token *) 0 ;
-  unsigned int result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  result = (unsigned int) ((arg1)->first);
-  jresult = (jlong)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1length_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
-  Token *arg1 = (Token *) 0 ;
-  unsigned int arg2 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  arg2 = (unsigned int)jarg2; 
-  if (arg1) (arg1)->length = arg2;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1length_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  Token *arg1 = (Token *) 0 ;
-  unsigned int result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  result = (unsigned int) ((arg1)->length);
-  jresult = (jlong)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1initialized_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
-  Token *arg1 = (Token *) 0 ;
-  bool arg2 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  arg2 = jarg2 ? true : false; 
-  if (arg1) (arg1)->initialized = arg2;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1initialized_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jboolean jresult = 0 ;
-  Token *arg1 = (Token *) 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  result = (bool) ((arg1)->initialized);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1correction_1is_1allowed_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
-  Token *arg1 = (Token *) 0 ;
-  bool arg2 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  arg2 = jarg2 ? true : false; 
-  if (arg1) (arg1)->correction_is_allowed = arg2;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1correction_1is_1allowed_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jboolean jresult = 0 ;
-  Token *arg1 = (Token *) 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  result = (bool) ((arg1)->correction_is_allowed);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1ID_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
-  Token *arg1 = (Token *) 0 ;
-  int arg2 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  arg2 = (int)jarg2; 
-  if (arg1) (arg1)->ID = arg2;
-}
-
-
-SWIGEXPORT jint JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1ID_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jint jresult = 0 ;
-  Token *arg1 = (Token *) 0 ;
-  int result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  result = (int) ((arg1)->ID);
-  jresult = (jint)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1str_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
-  Token *arg1 = (Token *) 0 ;
-  std::u16string *arg2 = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
+  arg1 = *(Correct **)&jarg1; 
   if(!jarg2) {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
-    return ;
-  }
-  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0);
-  if (!arg2_pstr) return ;
-  std::u16string arg2_str(arg2_pstr);
-  arg2 = &arg2_str;
-  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
-  if (arg1) (arg1)->str = *arg2;
-}
-
-
-SWIGEXPORT jstring JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1str_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jstring jresult = 0 ;
-  Token *arg1 = (Token *) 0 ;
-  std::u16string *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  result = (std::u16string *) & ((arg1)->str);
-  jresult = jenv->NewStringUTF(result->c_str()); 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1sentence_1start_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
-  Token *arg1 = (Token *) 0 ;
-  bool arg2 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  arg2 = jarg2 ? true : false; 
-  if (arg1) (arg1)->sentence_start = arg2;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1sentence_1start_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jboolean jresult = 0 ;
-  Token *arg1 = (Token *) 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  result = (bool) ((arg1)->sentence_start);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_new_1Token_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jlong jarg2, jstring jarg3) {
-  jlong jresult = 0 ;
-  unsigned int arg1 ;
-  unsigned int arg2 ;
-  std::u16string *arg3 = 0 ;
-  Token *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = (unsigned int)jarg1; 
-  arg2 = (unsigned int)jarg2; 
-  if(!jarg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
     return 0;
-  }
-  const char *arg3_pstr = (const char *)jenv->GetStringUTFChars(jarg3, 0);
-  if (!arg3_pstr) return 0;
-  std::u16string arg3_str(arg3_pstr);
-  arg3 = &arg3_str;
-  jenv->ReleaseStringUTFChars(jarg3, arg3_pstr); 
-  result = (Token *)new Token(arg1,arg2,(std::u16string const &)*arg3);
-  *(Token **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1InitLexiconInformation(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jboolean jarg3) {
-  Token *arg1 = (Token *) 0 ;
-  unsigned int arg2 ;
-  bool arg3 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  arg2 = (unsigned int)jarg2; 
-  arg3 = jarg3 ? true : false; 
-  (arg1)->InitLexiconInformation(arg2,arg3);
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Token_1isUnknown(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jboolean jresult = 0 ;
-  Token *arg1 = (Token *) 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Token **)&jarg1; 
-  result = (bool)(arg1)->isUnknown();
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_new_1Token_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  jlong jresult = 0 ;
-  std::u16string arg1 ;
-  std::u16string const *argp1 ;
-  Token *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  argp1 = *(std::u16string **)&jarg1; 
-  if (!argp1) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "Attempt to dereference null std::u16string const");
-    return 0;
-  }
-  arg1 = *argp1; 
-  result = (Token *)new Token(arg1);
-  *(Token **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_delete_1Token(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  Token *arg1 = (Token *) 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = *(Token **)&jarg1; 
-  delete arg1;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_SpellcheckerCorrection_1type_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
-  SpellcheckerCorrection *arg1 = (SpellcheckerCorrection *) 0 ;
-  SpellcheckerCorrection::type_t arg2 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(SpellcheckerCorrection **)&jarg1; 
-  arg2 = (SpellcheckerCorrection::type_t)jarg2; 
-  if (arg1) (arg1)->type = arg2;
-}
-
-
-SWIGEXPORT jint JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_SpellcheckerCorrection_1type_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jint jresult = 0 ;
-  SpellcheckerCorrection *arg1 = (SpellcheckerCorrection *) 0 ;
-  SpellcheckerCorrection::type_t result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(SpellcheckerCorrection **)&jarg1; 
-  result = (SpellcheckerCorrection::type_t) ((arg1)->type);
-  jresult = (jint)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_SpellcheckerCorrection_1correction_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
-  SpellcheckerCorrection *arg1 = (SpellcheckerCorrection *) 0 ;
-  std::u16string *arg2 = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(SpellcheckerCorrection **)&jarg1; 
-  if(!jarg2) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
-    return ;
-  }
-  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0);
-  if (!arg2_pstr) return ;
-  std::u16string arg2_str(arg2_pstr);
-  arg2 = &arg2_str;
+  } 
+  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
+  if (!arg2_pstr) return 0;
+  (&arg2)->assign(arg2_pstr);
   jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
-  if (arg1) (arg1)->correction = *arg2;
-}
-
-
-SWIGEXPORT jstring JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_SpellcheckerCorrection_1correction_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jstring jresult = 0 ;
-  SpellcheckerCorrection *arg1 = (SpellcheckerCorrection *) 0 ;
-  std::u16string *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(SpellcheckerCorrection **)&jarg1; 
-  result = (std::u16string *) & ((arg1)->correction);
-  jresult = jenv->NewStringUTF(result->c_str()); 
+  result = (arg1)->suggest(arg2);
+  jresult = jenv->NewStringUTF((&result)->c_str()); 
   return jresult;
 }
 
 
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_SpellcheckerCorrection_1alternatives_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
-  SpellcheckerCorrection *arg1 = (SpellcheckerCorrection *) 0 ;
-  std::vector< std::u16string > *arg2 = (std::vector< std::u16string > *) 0 ;
+SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_delete_1Correct(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  Correct *arg1 = (Correct *) 0 ;
   
   (void)jenv;
   (void)jcls;
-  (void)jarg1_;
-  arg1 = *(SpellcheckerCorrection **)&jarg1; 
-  arg2 = *(std::vector< std::u16string > **)&jarg2; 
-  if (arg1) (arg1)->alternatives = *arg2;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_SpellcheckerCorrection_1alternatives_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  SpellcheckerCorrection *arg1 = (SpellcheckerCorrection *) 0 ;
-  std::vector< std::u16string > *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(SpellcheckerCorrection **)&jarg1; 
-  result = (std::vector< std::u16string > *)& ((arg1)->alternatives);
-  *(std::vector< std::u16string > **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_new_1SpellcheckerCorrection_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jint jarg1) {
-  jlong jresult = 0 ;
-  SpellcheckerCorrection::type_t arg1 ;
-  SpellcheckerCorrection *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = (SpellcheckerCorrection::type_t)jarg1; 
-  result = (SpellcheckerCorrection *)new SpellcheckerCorrection(arg1);
-  *(SpellcheckerCorrection **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_new_1SpellcheckerCorrection_1_1SWIG_11(JNIEnv *jenv, jclass jcls) {
-  jlong jresult = 0 ;
-  SpellcheckerCorrection *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  result = (SpellcheckerCorrection *)new SpellcheckerCorrection();
-  *(SpellcheckerCorrection **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_delete_1SpellcheckerCorrection(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  SpellcheckerCorrection *arg1 = (SpellcheckerCorrection *) 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = *(SpellcheckerCorrection **)&jarg1; 
-  delete arg1;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_new_1Spellchecker(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  Configuration *arg1 = (Configuration *) 0 ;
-  Spellchecker *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Configuration **)&jarg1; 
-  result = (Spellchecker *)new Spellchecker(arg1);
-  *(Spellchecker **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Spellchecker_1Spellcheck_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jlong jarg3, jlong jarg4) {
-  Spellchecker *arg1 = (Spellchecker *) 0 ;
-  std::vector< TokenP > *arg2 = 0 ;
-  std::vector< SpellcheckerCorrection > *arg3 = 0 ;
-  unsigned int arg4 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Spellchecker **)&jarg1; 
-  arg2 = *(std::vector< TokenP > **)&jarg2;
-  if (!arg2) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::vector< TokenP > const & reference is null");
-    return ;
-  } 
-  arg3 = *(std::vector< SpellcheckerCorrection > **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::vector< SpellcheckerCorrection > & reference is null");
-    return ;
-  } 
-  arg4 = (unsigned int)jarg4; 
-  (arg1)->Spellcheck((std::vector< TokenP > const &)*arg2,*arg3,arg4);
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_Spellchecker_1Spellcheck_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jlong jarg3) {
-  Spellchecker *arg1 = (Spellchecker *) 0 ;
-  std::vector< TokenP > *arg2 = 0 ;
-  std::vector< SpellcheckerCorrection > *arg3 = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(Spellchecker **)&jarg1; 
-  arg2 = *(std::vector< TokenP > **)&jarg2;
-  if (!arg2) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::vector< TokenP > const & reference is null");
-    return ;
-  } 
-  arg3 = *(std::vector< SpellcheckerCorrection > **)&jarg3;
-  if (!arg3) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::vector< SpellcheckerCorrection > & reference is null");
-    return ;
-  } 
-  (arg1)->Spellcheck((std::vector< TokenP > const &)*arg2,*arg3);
-}
-
-
-SWIGEXPORT void JNICALL Java_cz_cuni_mff_ufal_korektor_korektorJNI_delete_1Spellchecker(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  Spellchecker *arg1 = (Spellchecker *) 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = *(Spellchecker **)&jarg1; 
+  arg1 = *(Correct **)&jarg1; 
   delete arg1;
 }
 

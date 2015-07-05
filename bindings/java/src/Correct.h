@@ -8,35 +8,41 @@
 #include "utils/parse.h"
 #include "version/version.h"
 
+#include <string>
 #include <sstream>
 
 using namespace ufal::korektor;
+using namespace std;
 
-class Korektor {
+class Correct {
 private:
+	ConfigurationP config;
 	Spellchecker spellchecker;
-	unique_ptr<InputFormat> input_format;
+	// unique_ptr<InputFormat> input_format;
+	// unique_ptr<OutputFormat> output_format;
 	unsigned max_corrections = 2;
 
-public:
-	Korektor(string path) {
-		ConfigurationP configuration(new Configuration(path));
-		spellchecker = Spellchecker(configuration.get());
-
-		input_format = InputFormat::NewUntokenizedLinesInputFormat(configuration->lexicon);
-		output_format = OutputFormat::NewXmlOutputFormat();
+	Spellchecker setup() {
+		return Spellchecker(config.get());
 	}
-	string check(string input) {
+
+public:
+	Correct(string path) : config(new Configuration(path)), spellchecker(setup()) {}
+	string suggest(string input) {
 		std::ostringstream response;
 
-		string output_block;
+		string input_block, output_block;
 		vector<TokenP> tokens;
 		vector<SpellcheckerCorrection> corrections;
 
 		std::stringstream ss;
 		ss.str(input);
 
-		while (input_format->ReadBlock(ss, input_block)) {
+		auto input_format = InputFormat::NewUntokenizedLinesInputFormat(config->lexicon);
+		cout << "IF done\n";
+		auto output_format = OutputFormat::NewXmlOutputFormat();
+
+		while (input_format->ReadBlock(ss, input_block)) { // TODO REMOVE THIS AND USE input AS input_block
 			input_format->SetBlock(input_block);
 			output_format->SetBlock(input_block);
 			output_block.clear();

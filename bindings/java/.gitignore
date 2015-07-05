@@ -1,5 +1,5 @@
 cz/
-libmorphodita_java.dylib
-libmorphodita_java.so
-morphodita.jar
-morphodita_java.cpp
+libkorektor_java.dylib
+libkorektor_java.so
+korektor.jar
+korektor_java.cxx

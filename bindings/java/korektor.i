@@ -10,14 +10,21 @@
 #include "utils/options.h"
 #include "utils/parse.h"
 #include "version/version.h"
+#include <codecvt>
 using namespace ufal::korektor;
 %}
+
+%include "std_string.i"
+%include "std_vector.i"
+%include "u16string.i"
+
+using namespace std;
 
 #define SP_DEF(cl_name) typedef shared_ptr<cl_name> cl_name##P
 
 class Configuration {
 public:
-	Configuration(const string &conf_file);
+	Configuration(string conf_file);
 };
 
 struct Token {
@@ -34,7 +41,7 @@ struct Token {
   void InitLexiconInformation(unsigned _ID, bool _correction_is_allowed);
   inline bool isUnknown() { return ID == -1; }
 
-  Token(const u16string &u_str);
+  Token(const u16string u_str);
 };
 
 SP_DEF(Token);

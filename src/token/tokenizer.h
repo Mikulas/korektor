@@ -31,9 +31,7 @@ class Tokenizer {
 
   void initLexicon(LexiconP _lexicon)
   {
-    cout << "tok init: " << _lexicon << "\n";
     lexicon = _lexicon;
-    cout << "tok init: " << lexicon << "\n";
   }
 
   /// @brief Tokenize the given text

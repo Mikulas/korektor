@@ -20,9 +20,7 @@ class UntokenizedInputFormat : public InputFormat {
  public:
   UntokenizedInputFormat(LexiconP lexicon, bool segment_on_newline, bool segment_on_punctuation)
       : segment_on_newline(segment_on_newline), segment_on_punctuation(segment_on_punctuation) {
-    cout << "init\n";
     tokenizer.initLexicon(lexicon);
-    cout << "done\n";
   }
 
   virtual bool ReadBlock(istream& ifs, string& block) override {

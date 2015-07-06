@@ -22,12 +22,17 @@ private:
 	// unique_ptr<OutputFormat> output_format;
 	unsigned max_corrections = 2;
 
+	ConfigurationP cfgSetup(string path) {
+		ConfigurationP configuration(new Configuration(path));
+		return configuration;
+	}
+
 	Spellchecker setup() {
 		return Spellchecker(config.get());
 	}
 
 public:
-	Correct(string path) : config(new Configuration(path)), spellchecker(setup()) {}
+	Correct(string path) : config(cfgSetup(path)) , spellchecker(setup()) {}
 	string suggest(string input) {
 		std::ostringstream response;
 
@@ -39,7 +44,6 @@ public:
 		ss.str(input);
 
 		auto input_format = InputFormat::NewUntokenizedLinesInputFormat(config->lexicon);
-		cout << "IF done\n";
 		auto output_format = OutputFormat::NewXmlOutputFormat();
 
 		while (input_format->ReadBlock(ss, input_block)) { // TODO REMOVE THIS AND USE input AS input_block

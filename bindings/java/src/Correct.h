@@ -44,7 +44,7 @@ public:
 		ss.str(input);
 
 		auto input_format = InputFormat::NewUntokenizedLinesInputFormat(config->lexicon);
-		auto output_format = OutputFormat::NewXmlOutputFormat();
+		auto output_format = OutputFormat::NewOriginalOutputFormat();
 
 		while (input_format->ReadBlock(ss, input_block)) { // TODO REMOVE THIS AND USE input AS input_block
 			input_format->SetBlock(input_block);
